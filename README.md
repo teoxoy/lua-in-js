@@ -2,6 +2,21 @@
 
 A Lua to JS transpiler
 
+Usage example (I am using it just to convert a lua file to js; run the temporary js file and get some data from it):
+```
+const fs = require('fs')
+const lua2js = require('lua2js')
+const execSync = require('child_process').execSync
+
+const data = lua2js.parser.parse(mainFileData)
+fs.writeFileSync('./temp.js', `
+  require("lua2js").runtime;
+  ${data}
+  require("fs").writeFileSync('./temp.json', JSON.stringify(Tget($get($, 'data'), 'raw').toObject(), null, 2));
+`)
+execSync('node temp.js')
+```
+
 This library is based on the sourcecode of this library: https://github.com/paulcuth/starlight, which is under this license:
 
 ```
