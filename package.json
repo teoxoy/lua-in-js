@@ -1,11 +1,12 @@
 {
-  "name": "lua2js",
+  "name": "lua-js",
   "version": "1.0.0",
-  "description": "A Lua to JS transpiler",
+  "description": "A Lua to JS transpiler / runtime",
   "keywords": [
     "lua",
     "javascript",
-    "transpiler"
+    "transpiler",
+    "runtime"
   ],
   "author": "Teoxoy",
   "license": "MIT",
@@ -13,7 +14,7 @@
   "module": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/teoxoy/lua2js.git"
+    "url": "git://github.com/teoxoy/lua-js.git"
   },
   "scripts": {
     "build": "webpack"

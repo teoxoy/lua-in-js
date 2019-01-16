@@ -1,6 +1,12 @@
 # lua2js
 
-A Lua to JS transpiler
+A Lua to JS transpiler / runtime
+
+## Install
+
+```
+npm i lua-js
+```
 
 Usage example (I am using it just to convert a lua file to js; run the temporary js file and get some data from it):
 ```
