@@ -1,24 +1,33 @@
 {
   "name": "lua2js",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A Lua to JS transpiler",
-  "main": "dist/lua2js.js",
-  "module": "src/index.js",
+  "keywords": [
+    "lua",
+    "javascript",
+    "transpiler"
+  ],
   "author": "Teoxoy",
   "license": "MIT",
+  "main": "dist/lua2js.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/teoxoy/lua2js.git"
+  },
   "scripts": {
     "build": "webpack"
   },
   "dependencies": {
-    "printf": "^0.2.5",
+    "printf": "^0.5.1",
     "luaparse": "^0.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
-    "babel-loader": "^8.0.0-beta.2",
-    "clean-webpack-plugin": "^0.1.19",
-    "webpack": "^4.4.1",
-    "webpack-cli": "^2.0.13"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-loader": "^8.0.5",
+    "clean-webpack-plugin": "^1.0.0",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
   }
 }
