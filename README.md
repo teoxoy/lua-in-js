@@ -1,22 +1,22 @@
-# lua2js
+# lua-in-js
 
 A Lua to JS transpiler / runtime
 
 ## Install
 
 ```
-npm i lua-js
+npm i lua-in-js
 ```
 
 Usage example (I am using it just to convert a lua file to js; run the temporary js file and get some data from it):
 ```
 const fs = require('fs')
-const lua2js = require('lua2js')
+const lua2injs = require('lua-in-js')
 const execSync = require('child_process').execSync
 
-const data = lua2js.parser.parse(mainFileData)
+const data = luainjs.parser.parse(mainFileData)
 fs.writeFileSync('./temp.js', `
-  require("lua2js").runtime;
+  require("lua-in-js").runtime;
   ${data}
   require("fs").writeFileSync('./temp.json', JSON.stringify(Tget($get($, 'data'), 'raw').toObject(), null, 2));
 `)

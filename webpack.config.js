@@ -8,8 +8,8 @@ module.exports = {
     entry: './src/index',
     output: {
         path: path.resolve(__dirname, './dist'),
-        filename: 'lua2js.js',
-        library: 'lua2js',
+        filename: 'lua-in-js.js',
+        library: 'lua-in-js',
         libraryTarget:'umd'
     },
     module: {
