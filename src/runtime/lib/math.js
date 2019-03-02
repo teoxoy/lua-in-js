@@ -98,7 +98,7 @@ export function frexp(x) {
 
 	let delta = x > 0? 1 : -1;
 	x *= delta;
-	
+
 	let exponent = Math.floor(Math.log(x) / Math.log(2)) + 1;
 	let mantissa = x / Math.pow(2, exponent);
 
@@ -119,7 +119,7 @@ export function ldexp(m, e) {
 export function log(x, base) {
 	x = coerceArgToNumber(x, 'log', 1);
 	if (base === void 0) {
-		return Math.log(x);		
+		return Math.log(x);
 	} else {
 		y = coerceArgToNumber(y, 'log', 2);
 		return Math.log(x) / Math.log(base);
@@ -157,7 +157,7 @@ export const pi = Math.PI;
 
 export function pow(x, y) {
 	x = coerceArgToNumber(x, 'pow', 1);
-	y = coercArgToNumber(y, 'pow', 2);
+	y = coerceArgToNumber(y, 'pow', 2);
 	return Math.pow(x, y);
 }
 
