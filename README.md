@@ -9,7 +9,7 @@ npm i lua-in-js
 ```
 
 Usage example (I am using it just to convert a lua file to js; run the temporary js file and get some data from it):
-```
+```js
 const fs = require('fs')
 const lua2injs = require('lua-in-js')
 const execSync = require('child_process').execSync
