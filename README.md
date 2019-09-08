@@ -1,6 +1,11 @@
 # lua-in-js
 
-A Lua to JS transpiler / runtime
+[![npm](https://img.shields.io/npm/v/lua-in-js.svg?style=flat-square)](https://www.npmjs.com/package/lua-in-js)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat-square)](./CONTRIBUTING.md)
+[![GitHub](https://img.shields.io/github/license/teoxoy/lua-in-js.svg?style=flat-square&color=blue)](./LICENSE)
+&nbsp;&nbsp;_Badges are clickable!_
+
+A Lua to JS transpiler/runtime. This library is a rewrite of [Starlight](https://github.com/paulcuth/starlight) with a lot of improvements.
 
 ## Install
 
@@ -8,43 +13,68 @@ A Lua to JS transpiler / runtime
 npm i lua-in-js
 ```
 
-Usage example (I am using it just to convert a lua file to js; run the temporary js file and get some data from it):
+## API
+
+### Import
+
 ```js
-const fs = require('fs')
-const lua2injs = require('lua-in-js')
-const execSync = require('child_process').execSync
-
-const data = luainjs.parser.parse(mainFileData)
-fs.writeFileSync('./temp.js', `
-  require("lua-in-js").runtime;
-  ${data}
-  require("fs").writeFileSync('./temp.json', JSON.stringify(Tget($get($, 'data'), 'raw').toObject(), null, 2));
-`)
-execSync('node temp.js')
+const luainjs = require(luainjs)
+// or
+import luainjs from 'luainjs'
 ```
 
-This library is based on the sourcecode of this library: https://github.com/paulcuth/starlight, which is under this license:
+### Create the lua environment
 
+Lua environments are isolated from each other (they got different global scopes)
+
+```js
+const luaEnv = luainjs.createEnv()
 ```
-The MIT License (MIT)
 
-Copyright 2015—2016 Paul Cuthbertson
+A config object can be passed in for extra functionality
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+```js
+const luaEnv = luainjs.createEnv({
+    LUA_PATH, // default value of package.path
+    fileExists, // function that takes in a path and returns a boolean
+    loadFile, // function that takes in a path and returns the content of a file
+    stdin, // string representing the standard input
+    stdout, // function representing the standard output
+    osExit // function called by os.exit
+})
 ```
+
+### Run a script or file
+
+```js
+luaEnv.run('print(\'Hello world!\')')
+```
+
+```js
+luaEnv.runfile('somefile.lua')
+```
+
+`runfile` uses `config.fileExists` and `config.loadFile`
+
+## Example
+
+Check out the [test runner](./tests/test.js) for a concrete example.
+
+## Missing functionality
+
+ - coroutine library
+ - debug library
+ - utf8 library
+ - io library
+ - package.cpath
+ - package.loadlib
+ - string.dump
+ - string.pack
+ - string.packsize
+ - string.unpack
+ - os.clock
+ - os.execute
+ - os.getenv
+ - os.remove
+ - os.rename
+ - os.tmpname

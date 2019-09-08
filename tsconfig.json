@@ -1,0 +1,32 @@
+{
+    "include": ["src/**/*"],
+    "exclude": ["node_modules/*"],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "declarationDir": "dist/types",
+
+        "target": "es6",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "lib": ["es6", "dom"],
+
+        "pretty": true,
+
+        "sourceMap": true,
+        "alwaysStrict": true,
+        "removeComments": true,
+
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        "preserveConstEnums": true,
+
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
+    }
+}

@@ -1,34 +1,50 @@
 {
-  "name": "lua-in-js",
-  "version": "1.1.0",
-  "description": "A Lua to JS transpiler / runtime",
-  "keywords": [
-    "lua",
-    "javascript",
-    "transpiler",
-    "runtime"
-  ],
-  "author": "Teoxoy",
-  "license": "MIT",
-  "main": "dist/lua-in-js.js",
-  "module": "src/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/teoxoy/lua-in-js.git"
-  },
-  "scripts": {
-    "build": "webpack"
-  },
-  "dependencies": {
-    "printf": "^0.5.1",
-    "luaparse": "^0.2.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
-    "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^1.0.0",
-    "webpack": "^4.28.4",
-    "webpack-cli": "^3.2.1"
-  }
+    "name": "lua-in-js",
+    "version": "2.0.0",
+    "description": "A Lua to JS transpiler/runtime",
+    "keywords": [
+        "lua",
+        "javascript",
+        "typescript",
+        "transpiler",
+        "runtime",
+        "parser"
+    ],
+    "author": "Teoxoy",
+    "license": "MIT",
+    "main": "dist/lua-in-js.cjs.js",
+    "module": "dist/lua-in-js.es.js",
+    "typings": "dist/types/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/teoxoy/lua-in-js.git"
+    },
+    "scripts": {
+        "build": "rimraf dist && rollup -c rollup.config.js",
+        "dev": "rimraf dist && rollup -c rollup.config.js -w",
+        "test": "node ./tests/test.js",
+        "lint": "eslint . --ignore-path .gitignore --ext .ts",
+        "lint:fix": "eslint . --ignore-path .gitignore --ext .ts --fix"
+    },
+    "dependencies": {
+        "luaparse": "^0.2.1",
+        "printj": "^1.2.2"
+    },
+    "devDependencies": {
+        "@types/luaparse": "^0.2.6",
+        "@types/node": "^12.7.4",
+        "@typescript-eslint/eslint-plugin": "^2.1.0",
+        "@typescript-eslint/parser": "^2.1.0",
+        "eslint": "^6.3.0",
+        "eslint-config-prettier": "^6.2.0",
+        "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-prettier": "^3.1.0",
+        "prettier": "1.18.2",
+        "rimraf": "^3.0.0",
+        "rollup": "^1.20.3",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-typescript2": "^0.24.0",
+        "typescript": "^3.6.2"
+    }
 }
