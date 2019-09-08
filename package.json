@@ -12,6 +12,10 @@
     ],
     "author": "Teoxoy",
     "license": "MIT",
+    "files": [
+        "dist",
+        "src"
+    ],
     "main": "dist/lua-in-js.cjs.js",
     "module": "dist/lua-in-js.es.js",
     "typings": "dist/types/index.d.ts",
