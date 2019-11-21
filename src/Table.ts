@@ -1,4 +1,4 @@
-import { hasOwnProperty, LuaType, coerceArgToTable, coerceToString } from './utils'
+import { hasOwnProperty, LuaType, tostring } from './utils'
 
 type MetaMethods =
     // unary op
@@ -149,7 +149,7 @@ class Table {
     }
 
     public toObject(): unknown[] | Record<string, unknown> {
-        const outputAsArray = Object.keys(this.strValues).length === 0 && getn(this) > 0
+        const outputAsArray = Object.keys(this.strValues).length === 0 && this.getn() > 0
         const result: unknown[] | Record<string, unknown> = outputAsArray ? [] : {}
 
         for (let i = 1; i < this.numValues.length; i++) {
@@ -177,68 +177,42 @@ class Table {
 
         return result
     }
-}
 
-function tostring(v: LuaType): string {
-    if (v instanceof Table) {
-        const mm = v.getMetaMethod('__tostring')
-        if (mm) return mm(v)[0]
+    public getn(): number {
+        const vals = this.numValues
+        const keys: boolean[] = []
 
-        return valToStr(v, 'table: 0x')
-    }
-
-    if (v instanceof Function) {
-        return valToStr(v, 'function: 0x')
-    }
-
-    return coerceToString(v)
-
-    function valToStr(v: LuaType, prefix: string): string {
-        const s = v.toString()
-        if (s.indexOf(prefix) > -1) return s
-
-        const str = prefix + Math.floor(Math.random() * 0xffffffff).toString(16)
-        v.toString = () => str
-        return str
-    }
-}
-
-function getn(table: LuaType): number {
-    const TABLE = coerceArgToTable(table, 'getn', 1)
-
-    const vals = TABLE.numValues
-    const keys: boolean[] = []
-
-    for (const i in vals) {
-        if (hasOwnProperty(vals, i)) {
-            keys[i] = true
-        }
-    }
-
-    let j = 0
-    while (keys[j + 1]) {
-        j += 1
-    }
-
-    // Following translated from ltable.c (http://www.lua.org/source/5.3/ltable.c.html)
-    if (j > 0 && vals[j] === undefined) {
-        /* there is a boundary in the array part: (binary) search for it */
-        let i = 0
-
-        while (j - i > 1) {
-            const m = Math.floor((i + j) / 2)
-
-            if (vals[m] === undefined) {
-                j = m
-            } else {
-                i = m
+        for (const i in vals) {
+            if (hasOwnProperty(vals, i)) {
+                keys[i] = true
             }
         }
 
-        return i
-    }
+        let j = 0
+        while (keys[j + 1]) {
+            j += 1
+        }
 
-    return j
+        // Following translated from ltable.c (http://www.lua.org/source/5.3/ltable.c.html)
+        if (j > 0 && vals[j] === undefined) {
+            /* there is a boundary in the array part: (binary) search for it */
+            let i = 0
+
+            while (j - i > 1) {
+                const m = Math.floor((i + j) / 2)
+
+                if (vals[m] === undefined) {
+                    j = m
+                } else {
+                    i = m
+                }
+            }
+
+            return i
+        }
+
+        return j
+    }
 }
 
-export { MetaMethods, Table, getn, tostring }
+export { MetaMethods, Table }

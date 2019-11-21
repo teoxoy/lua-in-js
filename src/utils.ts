@@ -37,6 +37,30 @@ function type(v: LuaType): 'string' | 'number' | 'boolean' | 'function' | 'nil' 
     }
 }
 
+function tostring(v: LuaType): string {
+    if (v instanceof Table) {
+        const mm = v.getMetaMethod('__tostring')
+        if (mm) return mm(v)[0]
+
+        return valToStr(v, 'table: 0x')
+    }
+
+    if (v instanceof Function) {
+        return valToStr(v, 'function: 0x')
+    }
+
+    return coerceToString(v)
+
+    function valToStr(v: LuaType, prefix: string): string {
+        const s = v.toString()
+        if (s.indexOf(prefix) > -1) return s
+
+        const str = prefix + Math.floor(Math.random() * 0xffffffff).toString(16)
+        v.toString = () => str
+        return str
+    }
+}
+
 /* translate a relative string position: negative means back from end */
 function posrelat(pos: number, len: number): number {
     if (pos >= 0) return pos
@@ -178,6 +202,7 @@ export {
     LuaType,
     Config,
     type,
+    tostring,
     posrelat,
     coerceToBoolean,
     coerceToNumber,

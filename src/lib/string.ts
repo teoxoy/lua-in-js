@@ -1,7 +1,7 @@
 import printj from 'printj'
-import { Table, tostring } from '../Table'
+import { Table } from '../Table'
 import { LuaError } from '../LuaError'
-import { posrelat, coerceArgToNumber, coerceArgToString, hasOwnProperty, LuaType } from '../utils'
+import { tostring, posrelat, coerceArgToNumber, coerceArgToString, hasOwnProperty, LuaType } from '../utils'
 
 const ROSETTA_STONE: Record<string, string> = {
     '([^a-zA-Z0-9%(])-': '$1*?',

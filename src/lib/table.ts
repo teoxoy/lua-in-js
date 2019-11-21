@@ -1,4 +1,4 @@
-import { Table, getn } from '../Table'
+import { Table } from '../Table'
 import {
     LuaType,
     coerceToBoolean,
@@ -8,6 +8,11 @@ import {
     coerceArgToFunction
 } from '../utils'
 import { LuaError } from '../LuaError'
+
+function getn(table: LuaType): number {
+    const TABLE = coerceArgToTable(table, 'getn', 1)
+    return TABLE.getn()
+}
 
 /**
  * Given a list where all elements are strings or numbers, returns the string list[i]..sep..list[i+1] ··· sep..list[j].
@@ -103,7 +108,7 @@ function pack(...args: LuaType[]): Table {
  */
 function remove(table: LuaType, pos?: LuaType): LuaType {
     const TABLE = coerceArgToTable(table, 'remove', 1)
-    const max = getn(TABLE)
+    const max = TABLE.getn()
     const POS = pos === undefined ? max : coerceArgToNumber(pos, 'remove', 2)
 
     if (POS > max || POS < 0) {
@@ -162,7 +167,7 @@ function sort(table: Table, comp?: Function): void {
 function unpack(table: LuaType, i?: LuaType, j?: LuaType): LuaType[] {
     const TABLE = coerceArgToTable(table, 'unpack', 1)
     const I = i === undefined ? 1 : coerceArgToNumber(i, 'unpack', 2)
-    const J = j === undefined ? getn(TABLE) : coerceArgToNumber(j, 'unpack', 3)
+    const J = j === undefined ? TABLE.getn() : coerceArgToNumber(j, 'unpack', 3)
 
     return TABLE.numValues.slice(I, J + 1)
 }

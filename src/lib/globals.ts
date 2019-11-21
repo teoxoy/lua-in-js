@@ -1,10 +1,11 @@
 import { parse } from '../parser'
-import { Table, tostring, getn } from '../Table'
+import { Table } from '../Table'
 import { LuaError } from '../LuaError'
 import {
     LuaType,
     Config,
     type,
+    tostring,
     posrelat,
     coerceToNumber,
     coerceToString,
@@ -201,7 +202,7 @@ function rawget(table: LuaType, index: LuaType): LuaType {
  * Returns an integer.
  */
 function rawlen(v: LuaType): number {
-    if (v instanceof Table) return getn(v)
+    if (v instanceof Table) return v.getn()
 
     if (typeof v === 'string') return v.length
 

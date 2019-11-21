@@ -1,4 +1,4 @@
-import { MetaMethods, Table, getn } from './Table'
+import { MetaMethods, Table } from './Table'
 import { coerceToNumber, coerceToString, LuaType, coerceToBoolean } from './utils'
 import { LuaError } from './LuaError'
 
@@ -58,7 +58,7 @@ const len = (value: LuaType): number => {
         const mm = value.getMetaMethod('__len')
         if (mm) return mm(value)[0]
 
-        return getn(value)
+        return value.getn()
     }
 
     if (typeof value === 'string') return value.length
