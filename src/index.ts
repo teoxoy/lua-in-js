@@ -1,3 +1,5 @@
+/* eslint-disable import/order */
+/* eslint-disable import/no-duplicates */
 import { Scope } from './Scope'
 import { createG } from './lib/globals'
 import { operators } from './operators'
@@ -49,6 +51,7 @@ function createEnv(
 ): {
     run: (script: string) => LuaType
     runfile: (path: string) => LuaType
+    loadLib: (name: string, value: Table) => void
 } {
     const cfg: Config = {
         LUA_PATH: './?.lua',
@@ -65,17 +68,17 @@ function createEnv(
     )
     const loaded = libPackage.get('loaded') as Table
 
-    const load = (name: string, value: Table): void => {
+    const loadLib = (name: string, value: Table): void => {
         _G.rawset(name, value)
         loaded.rawset(name, value)
     }
 
-    load('_G', _G)
-    load('package', libPackage)
-    load('math', libMath)
-    load('table', libTable)
-    load('string', libString)
-    load('os', getLibOS(cfg))
+    loadLib('_G', _G)
+    loadLib('package', libPackage)
+    loadLib('math', libMath)
+    loadLib('table', libTable)
+    loadLib('string', libString)
+    loadLib('os', getLibOS(cfg))
 
     _G.rawset('require', _require)
 
@@ -91,8 +94,11 @@ function createEnv(
 
     return {
         run,
-        runfile
+        runfile,
+        loadLib
     }
 }
 
-export { createEnv }
+// eslint-disable-next-line import/first
+import * as utils from './utils'
+export { createEnv, Table, LuaError, utils }

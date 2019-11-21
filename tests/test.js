@@ -26,4 +26,18 @@ let exitCode = 0
     luaEnv.runfile('bwcoercion.lua')
 }
 
+{
+    const luaEnv = luainjs.createEnv()
+    function helloBuilder(name) {
+        const NAME = luainjs.utils.coerceArgToString(name, 'sayHi', 1)
+        return `Hello ${NAME}!`
+    }
+    const myLib = new luainjs.Table({ helloBuilder })
+    luaEnv.loadLib('myLib', myLib)
+    const str = luaEnv.run(`return myLib.helloBuilder('John')`)
+    if (str !== 'Hello John!') {
+        throw Error("Strings don't match!")
+    }
+}
+
 process.exit(exitCode)

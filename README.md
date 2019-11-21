@@ -56,6 +56,25 @@ luaEnv.runfile('somefile.lua')
 
 `runfile` uses `config.fileExists` and `config.loadFile`
 
+### Create a global library
+
+Creating a global library allows you write APIs that you can use in the Lua environment.
+
+```js
+function helloBuilder(name) {
+    const NAME = luainjs.utils.coerceArgToString(name, 'sayHi', 1)
+    return `Hello ${NAME}!`
+}
+
+const myLib = new luainjs.Table({ helloBuilder })
+luaEnv.loadLib('myLib', myLib)
+
+const helloStr = luaEnv.run(`return myLib.helloBuilder('John')`)
+console.log(helloStr)
+```
+
+Check out the [math lib](./src/lib/math.ts) for a more extensive example.
+
 ## Example
 
 Check out the [test runner](./tests/test.js) for a concrete example.
