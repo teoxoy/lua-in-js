@@ -44,17 +44,19 @@ const luaEnv = luainjs.createEnv({
 })
 ```
 
-### Run a script or file
+### Execute a script or file
 
 ```js
-luaEnv.run('print(\'Hello world!\')')
+const luaScript = luaEnv.parse('print(\'Hello world!\')')
+const returnValue = luaScript.exec()
 ```
 
 ```js
-luaEnv.runfile('somefile.lua')
+const luaScript = luaEnv.parseFile('somefile.lua')
+const returnValue = luaScript.exec()
 ```
 
-`runfile` uses `config.fileExists` and `config.loadFile`
+`parseFile` uses `config.fileExists` and `config.loadFile`
 
 ### Create a global library
 
@@ -69,7 +71,7 @@ function helloBuilder(name) {
 const myLib = new luainjs.Table({ helloBuilder })
 luaEnv.loadLib('myLib', myLib)
 
-const helloStr = luaEnv.run(`return myLib.helloBuilder('John')`)
+const helloStr = luaEnv.parse(`return myLib.helloBuilder('John')`).exec()
 console.log(helloStr)
 ```
 

@@ -11,7 +11,11 @@ import { libString, metatable as stringMetatable } from './lib/string'
 import { getLibOS } from './lib/os'
 import { getLibPackage } from './lib/package'
 import { LuaType, ensureArray, Config } from './utils'
-import { parse } from './parser'
+import { parse as parseScript } from './parser'
+
+interface Script {
+    exec: () => LuaType
+}
 
 const call = (f: Function | Table, ...args: LuaType[]): LuaType[] => {
     if (f instanceof Function) return ensureArray(f(...args))
@@ -49,8 +53,8 @@ const execChunk = (_G: Table, chunk: string, chunkName?: string): LuaType[] => {
 function createEnv(
     config: Config = {}
 ): {
-    run: (script: string) => LuaType
-    runfile: (path: string) => LuaType
+    parse: (script: string) => Script
+    parseFile: (path: string) => Script
     loadLib: (name: string, value: Table) => void
 } {
     const cfg: Config = {
@@ -63,7 +67,7 @@ function createEnv(
     const _G = createG(cfg, execChunk)
 
     const { libPackage, _require } = getLibPackage(
-        (content, moduleName) => execChunk(_G, parse(content), moduleName)[0],
+        (content, moduleName) => execChunk(_G, parseScript(content), moduleName)[0],
         cfg
     )
     const loaded = libPackage.get('loaded') as Table
@@ -82,19 +86,25 @@ function createEnv(
 
     _G.rawset('require', _require)
 
-    const run = (script: string): LuaType => execChunk(_G, parse(script))[0]
-    const runfile = (filename: string): LuaType => {
-        if (!cfg.fileExists) throw new LuaError('runfile requires the config.fileExists function')
-        if (!cfg.loadFile) throw new LuaError('runfile requires the config.loadFile function')
+    const parse = (code: string): Script => {
+        const script = parseScript(code)
+        return {
+            exec: () => execChunk(_G, script)[0]
+        }
+    }
+
+    const parseFile = (filename: string): Script => {
+        if (!cfg.fileExists) throw new LuaError('parseFile requires the config.fileExists function')
+        if (!cfg.loadFile) throw new LuaError('parseFile requires the config.loadFile function')
 
         if (!cfg.fileExists(filename)) throw new LuaError('file not found')
 
-        return run(cfg.loadFile(filename))
+        return parse(cfg.loadFile(filename))
     }
 
     return {
-        run,
-        runfile,
+        parse,
+        parseFile,
         loadLib
     }
 }

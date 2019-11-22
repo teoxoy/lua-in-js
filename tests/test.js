@@ -11,7 +11,7 @@ let exitCode = 0
         loadFile: p => fs.readFileSync(path.join(rootPath, p), { encoding: 'utf8' }),
         osExit: code => (exitCode += code)
     })
-    luaEnv.runfile('test-runner.lua')
+    luaEnv.parseFile('test-runner.lua').exec()
 }
 
 // TODO: make more official lua 5.3 tests pass (most of them don't pass because they `require "debug"`)
@@ -22,8 +22,8 @@ let exitCode = 0
         loadFile: p => fs.readFileSync(path.join(rootPath, p), { encoding: 'utf8' }),
         osExit: code => process.exit(code)
     })
-    luaEnv.runfile('goto.lua')
-    luaEnv.runfile('bwcoercion.lua')
+    luaEnv.parseFile('goto.lua').exec()
+    luaEnv.parseFile('bwcoercion.lua').exec()
 }
 
 {
@@ -34,7 +34,7 @@ let exitCode = 0
     }
     const myLib = new luainjs.Table({ helloBuilder })
     luaEnv.loadLib('myLib', myLib)
-    const str = luaEnv.run(`return myLib.helloBuilder('John')`)
+    const str = luaEnv.parse(`return myLib.helloBuilder('John')`).exec()
     if (str !== 'Hello John!') {
         throw Error("Strings don't match!")
     }

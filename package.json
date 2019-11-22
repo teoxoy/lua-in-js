@@ -1,6 +1,6 @@
 {
     "name": "lua-in-js",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "description": "A Lua to JS transpiler/runtime",
     "keywords": [
         "lua",
