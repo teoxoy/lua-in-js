@@ -18,9 +18,11 @@ npm i lua-in-js
 ### Import
 
 ```js
-const luainjs = require(luainjs)
-// or
-import luainjs from 'luainjs'
+import * as luainjs from 'lua-in-js'
+```
+
+```js
+const luainjs = require('lua-in-js')
 ```
 
 ### Create the lua environment
