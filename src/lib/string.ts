@@ -1,4 +1,4 @@
-import printj from 'printj'
+import * as printj from 'printj'
 import { Table } from '../Table'
 import { LuaError } from '../LuaError'
 import { tostring, posrelat, coerceArgToNumber, coerceArgToString, hasOwnProperty, LuaType } from '../utils'
