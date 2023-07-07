@@ -742,7 +742,8 @@ const parse = (data: string): string => {
     const ast = luaparse.parse(data.replace(/^#.*/, ''), {
         scope: false,
         comments: false,
-        luaVersion: '5.3'
+        luaVersion: '5.3',
+        encodingMode: 'x-user-defined'
     })
     checkGoto(ast)
     setExtraInfo(ast)
