@@ -44,7 +44,7 @@
         "eslint-plugin-import": "^2.18.2",
         "eslint-plugin-prettier": "^3.1.1",
         "prettier": "1.19.1",
-        "rimraf": "^3.0.0",
+        "rimraf": "^5.0.1",
         "rollup": "^1.27.3",
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-node-resolve": "^5.2.0",
