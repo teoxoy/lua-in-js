@@ -1,4 +1,4 @@
-import printj from 'printj'
+import { sprintf } from 'printj'
 import { Table } from '../Table'
 import { LuaError } from '../LuaError'
 import { tostring, posrelat, coerceArgToNumber, coerceArgToString, hasOwnProperty, LuaType } from '../utils'
@@ -165,19 +165,19 @@ function format(formatstring: string, ...args: LuaType[]): string {
             throw new LuaError(`bad argument #${i} to 'format' (no value)`)
         }
         if (/A|a|E|e|f|G|g/.test(modifier)) {
-            return printj.sprintf(format, coerceArgToNumber(arg, 'format', i))
+            return sprintf(format, coerceArgToNumber(arg, 'format', i))
         }
         if (/c|d|i|o|u|X|x/.test(modifier)) {
-            return printj.sprintf(format, coerceArgToNumber(arg, 'format', i))
+            return sprintf(format, coerceArgToNumber(arg, 'format', i))
         }
 
         if (modifier === 'q') {
             return `"${(arg as string).replace(/([\n"])/g, '\\$1')}"`
         }
         if (modifier === 's') {
-            return printj.sprintf(format, tostring(arg))
+            return sprintf(format, tostring(arg))
         }
-        return printj.sprintf(format, arg)
+        return sprintf(format, arg)
     })
 }
 
