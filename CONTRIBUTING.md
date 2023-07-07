@@ -13,7 +13,6 @@ We want to fix all the issues as soon as possible and a minimal reproduction sce
 ## Prerequisites
 
 -   [git](https://git-scm.com/)
--   [yarn](https://yarnpkg.com)
 -   [node](https://nodejs.org/en/)
 -   [vscode](https://code.visualstudio.com/)
 
@@ -26,11 +25,11 @@ This project uses `eslint` and `prettier` to lint and format code. I would recom
 1. Fork the repo
 2. Clone your fork
 3. Download the recommended workspace extensions in vscode
-4. Make your changes in a new git branch (`git checkout -b my-fix-branch master`)
-5. Run `yarn`
-6. Run `yarn start`
-7. Open the link in a browser or use the vscode debugger
-8. Make changes
+4. Create a new branch (`git checkout -b my-fix-branch master`)
+5. Install packages via `npm i`
+6. Make changes
+7. Build the library `npm run build`
+8. Run tests `npm run test`
 9. Commit your changes using a descriptive commit message
 10. Push your branch to GitHub `git push origin my-fix-branch`
 11. Start a pull request from GitHub
