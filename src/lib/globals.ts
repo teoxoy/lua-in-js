@@ -256,7 +256,7 @@ function setmetatable(table: LuaType, metatable: LuaType): Table {
         throw new LuaError('cannot change a protected metatable')
     }
 
-    TABLE.metatable = coerceArgToTable(metatable, 'setmetatable', 2)
+    TABLE.metatable = metatable === null ? null : coerceArgToTable(metatable, 'setmetatable', 2) 
     return TABLE
 }
 
