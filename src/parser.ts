@@ -223,6 +223,7 @@ const generate = (node: luaparse.Node): string | MemExpr => {
             const S = node.value
                 .replace(/([^\\])?\\(\d{1,3})/g, (_, pre, dec) => `${pre || ''}${String.fromCharCode(dec)}`)
                 .replace(/\\/g, '\\\\')
+                .replace(/`/g, '\\`')
 
             return `\`${S}\``
         }
