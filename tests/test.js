@@ -40,4 +40,17 @@ let exitCode = 0
     }
 }
 
+{
+    const luaEnv = luainjs.createEnv()
+    let str
+    try {
+        str = luaEnv.parse('return "Backtick `literals` in strings work"').exec()
+    } catch (e) {
+        throw Error('Backticks in strings transpile into invalid code!')
+    }
+    if (str !== 'Backtick `literals` in strings work') {
+        throw Error('Backticks in strings transpile incorrectly!')
+    }
+}
+
 process.exit(exitCode)
