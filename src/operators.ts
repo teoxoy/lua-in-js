@@ -36,6 +36,10 @@ const binaryBooleanArithmetic = (
 // extra
 const bool = (value: LuaType): boolean => coerceToBoolean(value)
 
+// logical
+const and = (l: LuaType, r: LuaType): LuaType => coerceToBoolean(l) ? r : l
+const or = (l: LuaType, r: LuaType): LuaType => coerceToBoolean(l) ? l : r
+
 // unary
 const not = (value: LuaType): boolean => !bool(value)
 
@@ -156,6 +160,8 @@ const ge = (left: LuaType, right: LuaType): boolean => !lt(left, right)
 
 const operators = {
     bool,
+    and,
+    or,
     not,
     unm,
     bnot,
@@ -178,7 +184,7 @@ const operators = {
     lt,
     le,
     gt,
-    ge
+    ge,
 }
 
 export { operators }
