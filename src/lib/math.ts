@@ -143,8 +143,8 @@ function rad(x: LuaType): number {
 function random(min?: LuaType, max?: LuaType): number {
     if (min === undefined && max === undefined) return getRandom()
     const firstArg = coerceArgToNumber(min, 'random', 1)
-    const MIN = max === undefined ? firstArg : 1
-    const MAX = max === undefined ? coerceArgToNumber(max, 'random', 2) : firstArg
+    const MIN = max !== undefined ? firstArg : 1
+    const MAX = max !== undefined ? coerceArgToNumber(max, 'random', 2) : firstArg
 
     if (MIN > MAX) throw new Error("bad argument #2 to 'random' (interval is empty)")
     return Math.floor(getRandom() * (MAX - MIN + 1) + MIN)
