@@ -1,17 +1,17 @@
 /* eslint-disable import/order */
 /* eslint-disable import/no-duplicates */
-import { Scope } from './Scope'
-import { createG } from './lib/globals'
-import { operators } from './operators'
-import { Table } from './Table'
 import { LuaError } from './LuaError'
+import { Scope } from './Scope'
+import { Table } from './Table'
+import { createG } from './lib/globals'
 import { libMath } from './lib/math'
-import { libTable } from './lib/table'
-import { libString, metatable as stringMetatable } from './lib/string'
 import { getLibOS } from './lib/os'
 import { getLibPackage } from './lib/package'
-import { LuaType, ensureArray, Config } from './utils'
+import { libString, metatable as stringMetatable } from './lib/string'
+import { libTable } from './lib/table'
+import { operators } from './operators'
 import { parse as parseScript } from './parser'
+import { Config, LuaType, ensureArray } from './utils'
 
 interface Script {
     exec: () => LuaType
@@ -61,13 +61,14 @@ function createEnv(
         LUA_PATH: './?.lua',
         stdin: '',
         stdout: console.log,
+        encoding: 'x-user-defined',
         ...config
     }
 
     const _G = createG(cfg, execChunk)
 
     const { libPackage, _require } = getLibPackage(
-        (content, moduleName) => execChunk(_G, parseScript(content), moduleName)[0],
+        (content, moduleName) => execChunk(_G, parseScript(content, cfg.encoding), moduleName)[0],
         cfg
     )
     const loaded = libPackage.get('loaded') as Table
@@ -111,4 +112,5 @@ function createEnv(
 
 // eslint-disable-next-line import/first
 import * as utils from './utils'
-export { createEnv, Table, LuaError, utils }
+export { LuaError, Table, createEnv, utils }
+

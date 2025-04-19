@@ -6,5 +6,10 @@
     "eslint.validate": [{ "language": "typescript", "autoFix": true }],
     "eslint.autoFixOnSave": true,
     "eslint.alwaysShowStatus": true,
-    "prettier.disableLanguages": ["ts"]
+    "prettier.disableLanguages": [
+        "ts"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    }
 }

@@ -10,6 +10,7 @@ interface Config {
     stdin?: string
     stdout?: (data: string) => void
     osExit?: (code: number) => void
+    encoding?: 'pseudo-latin1' | 'x-user-defined' | 'none'
 }
 
 /** Pattern to identify a float string value that can validly be converted to a number in Lua */
@@ -199,18 +200,19 @@ const hasOwnProperty = (obj: Record<string, unknown> | unknown[], key: string | 
     Object.prototype.hasOwnProperty.call(obj, key)
 
 export {
-    LuaType,
-    Config,
-    type,
-    tostring,
-    posrelat,
-    coerceToBoolean,
-    coerceToNumber,
-    coerceToString,
+    coerceArgToFunction,
     coerceArgToNumber,
     coerceArgToString,
     coerceArgToTable,
-    coerceArgToFunction,
+    coerceToBoolean,
+    coerceToNumber,
+    coerceToString,
+    Config,
     ensureArray,
-    hasOwnProperty
+    hasOwnProperty,
+    LuaType,
+    posrelat,
+    tostring,
+    type
 }
+
