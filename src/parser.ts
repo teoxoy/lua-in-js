@@ -303,10 +303,10 @@ const generate = (node: luaparse.Node): string | MemExpr => {
             const operator = node.operator
 
             if (operator === 'and') {
-                return `__lua.and(${left},${right})`
+                return `__lua.and(() => ${left}, () => ${right})`
             }
             if (operator === 'or') {
-                return `__lua.or(${left},${right})`
+                return `__lua.or(() => ${left}, () => ${right})`
             }
             throw new Error(`Unhandled logical operator: ${node.operator}`)
         }
