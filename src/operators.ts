@@ -37,8 +37,15 @@ const binaryBooleanArithmetic = (
 const bool = (value: LuaType): boolean => coerceToBoolean(value)
 
 // logical
-const and = (l: LuaType, r: LuaType): LuaType => coerceToBoolean(l) ? r : l
-const or = (l: LuaType, r: LuaType): LuaType => coerceToBoolean(l) ? l : r
+const and = (l: () => LuaType, r: () => LuaType): LuaType => {
+	const lv = l()
+	return coerceToBoolean(lv) ? r() : lv
+}
+
+const or = (l: () => LuaType, r: () => LuaType): LuaType => {
+	const lv = l()
+	return coerceToBoolean(lv) ? lv : r()
+}
 
 // unary
 const not = (value: LuaType): boolean => !bool(value)

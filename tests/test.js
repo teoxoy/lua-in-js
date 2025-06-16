@@ -24,6 +24,7 @@ let exitCode = 0
     })
     luaEnv.parseFile('goto.lua').exec()
     luaEnv.parseFile('bwcoercion.lua').exec()
+    luaEnv.parseFile('logical_operations.lua').exec()
 }
 
 {
