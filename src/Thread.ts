@@ -1,8 +1,6 @@
 import { LuaError } from './LuaError'
 import { LuaType } from './utils'
 
-export type ThreadStatus = 'running' | 'suspended' | 'dead'
-
 type Gen = Generator<LuaType[], LuaType[], LuaType[]>
 
 type GenFn = (...args: LuaType[]) => Gen
@@ -46,9 +44,10 @@ class Thread {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const mainThread = new Thread((function* () {}) as unknown as GenFn)
+const mainThread = new Thread((function*() {} as unknown) as GenFn)
 mainThread.status = 'running'
 Thread.main = mainThread
 Thread.current = mainThread
 
 export { Thread }
+export type ThreadStatus = 'running' | 'suspended' | 'dead'

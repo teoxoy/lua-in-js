@@ -38,13 +38,13 @@ const bool = (value: LuaType): boolean => coerceToBoolean(value)
 
 // logical
 const and = (l: () => LuaType, r: () => LuaType): LuaType => {
-	const lv = l()
-	return coerceToBoolean(lv) ? r() : lv
+    const lv = l()
+    return coerceToBoolean(lv) ? r() : lv
 }
 
 const or = (l: () => LuaType, r: () => LuaType): LuaType => {
-	const lv = l()
-	return coerceToBoolean(lv) ? lv : r()
+    const lv = l()
+    return coerceToBoolean(lv) ? lv : r()
 }
 
 // unary
@@ -191,7 +191,7 @@ const operators = {
     lt,
     le,
     gt,
-    ge,
+    ge
 }
 
 export { operators }
