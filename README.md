@@ -85,7 +85,6 @@ Check out the [test runner](./tests/test.js) for a concrete example.
 
 ## Missing functionality
 
- - coroutine library
  - debug library
  - utf8 library
  - io library
