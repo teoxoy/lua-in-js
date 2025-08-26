@@ -2,13 +2,13 @@ import { sprintf } from 'printj'
 import { Table } from '../Table'
 import { LuaError } from '../LuaError'
 import {
-    tostring,
-    posrelat,
+    coerceArgToBoolean,
     coerceArgToNumber,
     coerceArgToString,
     hasOwnProperty,
     LuaType,
-    coerceArgToBoolean
+    posrelat,
+    tostring
 } from '../utils'
 
 const ROSETTA_STONE: Record<string, string> = {
