@@ -10,7 +10,7 @@ import { libTable } from './lib/table'
 import { libString, metatable as stringMetatable } from './lib/string'
 import { getLibOS } from './lib/os'
 import { getLibPackage } from './lib/package'
-import { LuaType, ensureArray, Config } from './utils'
+import { LuaType, ensureArray, Config, hasOwnProperty } from './utils'
 import { parse as parseScript } from './parser'
 
 interface Script {
@@ -56,6 +56,7 @@ function createEnv(
     parse: (script: string) => Script
     parseFile: (path: string) => Script
     loadLib: (name: string, value: Table) => void
+    extendLib: (name: string, value: Table) => void
 } {
     const cfg: Config = {
         LUA_PATH: './?.lua',
@@ -75,6 +76,24 @@ function createEnv(
     const loadLib = (name: string, value: Table): void => {
         _G.rawset(name, value)
         loaded.rawset(name, value)
+    }
+
+    const extendLib = (name: string, value: Table): void => {
+        const lib = _G.rawget(name)
+        if (lib instanceof Table) {
+            for (let i = 1; i < value.numValues.length; i++) {
+                if (hasOwnProperty(value.numValues, i)) lib.rawset(i, value.numValues[i])
+            }
+            for (const key in value.strValues) {
+                if (hasOwnProperty(value.strValues, key)) lib.rawset(key, value.strValues[key])
+            }
+            for (let i = 0; i < value.keys.length; i++) {
+                lib.rawset(value.keys[i], value.values[i])
+            }
+            return
+        }
+
+        loadLib(name, value)
     }
 
     loadLib('_G', _G)
@@ -105,7 +124,8 @@ function createEnv(
     return {
         parse,
         parseFile,
-        loadLib
+        loadLib,
+        extendLib
     }
 }
 
