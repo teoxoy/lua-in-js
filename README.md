@@ -79,6 +79,18 @@ console.log(helloStr)
 
 Check out the [math lib](./src/lib/math.ts) for a more extensive example.
 
+### Extend a library
+
+Use `extendLib` to add new functions to an existing library without overwriting it.
+
+```js
+const extraMath = new luainjs.Table({ tau: Math.PI * 2 })
+luaEnv.extendLib('math', extraMath)
+
+const tau = luaEnv.parse('return math.tau').exec()
+console.log(tau)
+```
+
 ## Example
 
 Check out the [test runner](./tests/test.js) for a concrete example.
