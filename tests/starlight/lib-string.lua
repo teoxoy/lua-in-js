@@ -101,6 +101,13 @@ b = string.find(a, 'The .* fox')
 assertTrue (b == 1, 'The dot pattern should match across lines in string.find()')
 
 
+local ok, plainFind = pcall(function () return string.find('abc', 'a.c', 1, true) end)
+assertTrue (ok and plainFind == nil, 'string.find() should accept a boolean plain argument and disable pattern matching')
+
+local literalFind = string.find('a.c', 'a.c', 1, true)
+assertTrue (literalFind == 1, 'string.find() should find literal matches when plain is true')
+
+
 
 -- format
 
