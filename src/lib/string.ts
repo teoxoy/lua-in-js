@@ -8,7 +8,7 @@ import {
     coerceArgToString,
     hasOwnProperty,
     LuaType,
-    coerceToBoolean
+    coerceArgToBoolean
 } from '../utils'
 
 const ROSETTA_STONE: Record<string, string> = {
@@ -125,7 +125,7 @@ function find(s: LuaType, pattern: LuaType, init: LuaType, plain: LuaType): (num
     const S = coerceArgToString(s, 'find', 1)
     const P = coerceArgToString(pattern, 'find', 2)
     const INIT = init === undefined ? 1 : coerceArgToNumber(init, 'find', 3)
-    const PLAIN = plain === undefined ? false : coerceToBoolean(plain)
+    const PLAIN = plain === undefined ? false : coerceArgToBoolean(plain, 'find', 4)
 
     // Regex
     if (!PLAIN) {
