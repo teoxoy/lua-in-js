@@ -1,7 +1,15 @@
 import { sprintf } from 'printj'
 import { Table } from '../Table'
 import { LuaError } from '../LuaError'
-import { tostring, posrelat, coerceArgToNumber, coerceArgToString, hasOwnProperty, LuaType } from '../utils'
+import {
+    coerceArgToBoolean,
+    coerceArgToNumber,
+    coerceArgToString,
+    hasOwnProperty,
+    LuaType,
+    posrelat,
+    tostring
+} from '../utils'
 
 const ROSETTA_STONE: Record<string, string> = {
     '([^a-zA-Z0-9%(])-': '$1*?',
@@ -117,7 +125,7 @@ function find(s: LuaType, pattern: LuaType, init: LuaType, plain: LuaType): (num
     const S = coerceArgToString(s, 'find', 1)
     const P = coerceArgToString(pattern, 'find', 2)
     const INIT = init === undefined ? 1 : coerceArgToNumber(init, 'find', 3)
-    const PLAIN = plain === undefined ? false : coerceArgToNumber(plain, 'find', 4)
+    const PLAIN = plain === undefined ? false : coerceArgToBoolean(plain, 'find', 4)
 
     // Regex
     if (!PLAIN) {

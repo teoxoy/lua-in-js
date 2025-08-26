@@ -43,6 +43,16 @@ let exitCode = 0
 
 {
     const luaEnv = luainjs.createEnv()
+    const ext = new luainjs.Table({ foo: () => 'bar' })
+    luaEnv.extendLib('math', ext)
+    const val = luaEnv.parse('return math.foo()').exec()
+    if (val !== 'bar') {
+        throw Error('extendLib failed!')
+    }
+}
+
+{
+    const luaEnv = luainjs.createEnv()
     let str
     try {
         str = luaEnv.parse('return "Backtick `literals` in strings work"').exec()
