@@ -160,7 +160,7 @@ function coerceToString(val: LuaType, errorMessage?: string): string {
 function coerceArg<T>(
     value: LuaType,
     coerceFunc: (val: LuaType, errorMessage?: string) => T,
-    typ: 'number' | 'string',
+    typ: 'number' | 'string' | 'boolean',
     funcName: string,
     index: number
 ): T {
@@ -173,6 +173,10 @@ function coerceArgToNumber(value: LuaType, funcName: string, index: number): num
 
 function coerceArgToString(value: LuaType, funcName: string, index: number): string {
     return coerceArg<string>(value, coerceToString, 'string', funcName, index)
+}
+
+function coerceArgToBoolean(value: LuaType, funcName: string, index: number): boolean {
+    return coerceArg<boolean>(value, coerceToBoolean, 'boolean', funcName, index)
 }
 
 function coerceArgToTable(value: LuaType, funcName: string, index: number): Table {
@@ -207,6 +211,7 @@ export {
     coerceToBoolean,
     coerceToNumber,
     coerceToString,
+    coerceArgToBoolean,
     coerceArgToNumber,
     coerceArgToString,
     coerceArgToTable,
