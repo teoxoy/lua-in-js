@@ -156,7 +156,7 @@ const generate = (node: luaparse.Node): string | MemExpr => {
                 const argsStr = params.length === 0 ? '' : '...args'
                 const returnStr =
                     node.body.findIndex(node => node.type === 'ReturnStatement') === -1 ? '\nreturn []' : ''
-                return `(${argsStr}) => {\n${body}${returnStr}\n}`
+                return `function* (${argsStr}) {\n${body}${returnStr}\n}`
             }
 
             const params = node.parameters.map(param => {
@@ -212,7 +212,7 @@ const generate = (node: luaparse.Node): string | MemExpr => {
 
         case 'Chunk': {
             const body = parseBody(node)
-            return `'use strict'\nconst $0 = __lua.globalScope\nlet vars\nlet vals\nlet label\n\n${body}`
+            return `function* (__lua) {\n'use strict'\nconst $0 = __lua.globalScope\nlet vars\nlet vals\nlet label\n\n${body}\n}`
         }
 
         case 'Identifier': {
@@ -324,6 +324,19 @@ const generate = (node: luaparse.Node): string | MemExpr => {
         case 'CallExpression':
         case 'TableCallExpression':
         case 'StringCallExpression': {
+            if (
+                node.type === 'CallExpression' &&
+                node.base.type === 'MemberExpression' &&
+                node.base.base.type === 'Identifier' &&
+                node.base.base.name === 'coroutine' &&
+                node.base.identifier.type === 'Identifier' &&
+                node.base.identifier.name === 'yield' &&
+                node.base.indexer === '.'
+            ) {
+                const args = parseExpressions(node.arguments)
+                return `yield ${args}`
+            }
+
             const functionName = expression(node.base)
             const args =
                 node.type === 'CallExpression'

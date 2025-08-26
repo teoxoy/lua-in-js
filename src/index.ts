@@ -10,15 +10,27 @@ import { libTable } from './lib/table'
 import { libString, metatable as stringMetatable } from './lib/string'
 import { getLibOS } from './lib/os'
 import { getLibPackage } from './lib/package'
+import { libCoroutine } from './lib/coroutine'
 import { LuaType, ensureArray, Config } from './utils'
+import { Thread } from './Thread'
 import { parse as parseScript } from './parser'
 
 interface Script {
     exec: () => LuaType
 }
 
-const call = (f: Function | Table, ...args: LuaType[]): LuaType[] => {
-    if (f instanceof Function) return ensureArray(f(...args))
+const call = (f: Function | Table | Thread, ...args: LuaType[]): LuaType[] => {
+    if (f instanceof Thread) return f.resume(...args)
+
+    if (f instanceof Function) {
+        const res = f(...args)
+        if (res && typeof res.next === 'function') {
+            let r = res.next()
+            while (!r.done) r = res.next()
+            return ensureArray(r.value)
+        }
+        return ensureArray(res as LuaType)
+    }
 
     const mm = f instanceof Table && f.getMetaMethod('__call')
     if (mm) return ensureArray(mm(f, ...args))
@@ -37,17 +49,21 @@ const get = (t: Table | string, v: LuaType): LuaType => {
 }
 
 const execChunk = (_G: Table, chunk: string, chunkName?: string): LuaType[] => {
-    const exec = new Function('__lua', chunk)
+    const exec = new Function(`return ${chunk}`)() as (lua: unknown) => Generator<LuaType[]>
     const globalScope = new Scope(_G.strValues).extend()
     if (chunkName) globalScope.setVarargs([chunkName])
-    const res = exec({
+    const iterator = exec({
         globalScope,
         ...operators,
         Table,
         call,
         get
     })
-    return res === undefined ? [undefined] : res
+    let res = iterator.next()
+    while (!res.done) {
+        res = iterator.next()
+    }
+    return res.value === undefined ? [undefined] : res.value
 }
 
 function createEnv(
@@ -83,6 +99,7 @@ function createEnv(
     loadLib('table', libTable)
     loadLib('string', libString)
     loadLib('os', getLibOS(cfg))
+    loadLib('coroutine', libCoroutine)
 
     _G.rawset('require', _require)
 

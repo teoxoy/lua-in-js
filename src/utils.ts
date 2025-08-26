@@ -1,7 +1,8 @@
 import { LuaError } from './LuaError'
 import { Table } from './Table'
+import { Thread } from './Thread'
 
-type LuaType = undefined | boolean | number | string | Function | Table // thread | userdata
+type LuaType = undefined | boolean | number | string | Function | Table | Thread // userdata
 
 interface Config {
     LUA_PATH?: string
@@ -18,7 +19,7 @@ const FLOATING_POINT_PATTERN = /^[-+]?[0-9]*\.?([0-9]+([eE][-+]?[0-9]+)?)?$/
 /** Pattern to identify a hex string value that can validly be converted to a number in Lua */
 const HEXIDECIMAL_CONSTANT_PATTERN = /^(-)?0x([0-9a-fA-F]*)\.?([0-9a-fA-F]*)$/
 
-function type(v: LuaType): 'string' | 'number' | 'boolean' | 'function' | 'nil' | 'table' {
+function type(v: LuaType): 'string' | 'number' | 'boolean' | 'function' | 'nil' | 'table' | 'thread' {
     const t = typeof v
 
     switch (t) {
@@ -34,6 +35,7 @@ function type(v: LuaType): 'string' | 'number' | 'boolean' | 'function' | 'nil' 
         case 'object':
             if (v instanceof Table) return 'table'
             if (v instanceof Function) return 'function'
+            if (v instanceof Thread) return 'thread'
     }
 }
 
@@ -47,6 +49,10 @@ function tostring(v: LuaType): string {
 
     if (v instanceof Function) {
         return valToStr(v, 'function: 0x')
+    }
+
+    if (v instanceof Thread) {
+        return valToStr(v, 'thread: 0x')
     }
 
     return coerceToString(v)
@@ -193,6 +199,14 @@ function coerceArgToFunction(value: LuaType, funcName: string, index: number): F
     }
 }
 
+function coerceArgToThread(value: LuaType, funcName: string, index: number): Thread {
+    if (value instanceof Thread) {
+        return value
+    }
+    const typ = type(value)
+    throw new LuaError(`bad argument #${index} to '${funcName}' (thread expected, got ${typ})`)
+}
+
 const ensureArray = <T>(value: T | T[]): T[] => (value instanceof Array ? value : [value])
 
 const hasOwnProperty = (obj: Record<string, unknown> | unknown[], key: string | number): boolean =>
@@ -211,6 +225,7 @@ export {
     coerceArgToString,
     coerceArgToTable,
     coerceArgToFunction,
+    coerceArgToThread,
     ensureArray,
     hasOwnProperty
 }

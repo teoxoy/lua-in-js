@@ -54,4 +54,56 @@ let exitCode = 0
     }
 }
 
+{
+    const luaEnv = luainjs.createEnv()
+    const script = luaEnv.parse(`
+        local co = coroutine.create(function(a)
+            local x, y = coroutine.yield(a + 1, a + 2)
+            return x + y
+        end)
+        local r1 = {coroutine.resume(co, 3)}
+        if r1[1] ~= true or r1[2] ~= 4 or r1[3] ~= 5 then return 'fail1' end
+        local r2 = {coroutine.resume(co, 5, 6)}
+        if r2[1] ~= true or r2[2] ~= 11 then return 'fail2' end
+        return 'ok'
+    `)
+    if (script.exec() !== 'ok') throw Error('coroutine resume failed')
+}
+
+{
+    const luaEnv = luainjs.createEnv()
+    const script = luaEnv.parse(`
+        local f = coroutine.wrap(function(a)
+            local b = coroutine.yield(a + 1)
+            return a + b
+        end)
+        local r1 = {f(3)}
+        if r1[1] ~= 4 then return 'fail1' end
+        local r2 = {f(5)}
+        if r2[1] ~= 8 then return 'fail2' end
+        return 'ok'
+    `)
+    if (script.exec() !== 'ok') throw Error('coroutine wrap failed')
+}
+
+{
+    const luaEnv = luainjs.createEnv()
+    const script = luaEnv.parse(`
+        local main, isMain = coroutine.running()
+        if not isMain then return 'fail1' end
+        local co
+        co = coroutine.create(function()
+            if coroutine.status(co) ~= 'running' then return 'fail2' end
+            local t, m = coroutine.running()
+            if t ~= co or m then return 'fail3' end
+        end)
+        if coroutine.status(co) ~= 'suspended' then return 'fail4' end
+        local ok = coroutine.resume(co)
+        if not ok then return 'fail5' end
+        if coroutine.status(co) ~= 'dead' then return 'fail6' end
+        return 'ok'
+    `)
+    if (script.exec() !== 'ok') throw Error('coroutine running/status failed')
+}
+
 process.exit(exitCode)
